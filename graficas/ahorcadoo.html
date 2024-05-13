@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahorcado</title>
+</head>
+<body>
+    <h1>Ahorcado</h1>
+    <p>Ingrese la palabra:</p>
+    <input type="text" id="inputPalabra">
+    <button onclick="probarPalabra()">Probar</button>
+    <br><br>
+    <canvas id="myCanvas" width="400" height="400" style="border: 1px solid #000000;"></canvas>
+
+    <script>
+        let vidas = 6;
+
+        function probarPalabra() {
+            let palabra = document.getElementById("inputPalabra").value.toLowerCase();
+            if (palabra === "golondrina") {
+                alert("¡Felicidades, lo lograste!");
+            } else {
+                vidas--;
+                dibujarAhorcado(vidas);
+            }
+        }
+
+        function dibujarAhorcado(vidas) {
+            const canvas = document.getElementById("myCanvas");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (vidas < 6) {
+                // Dibujar parte del ahorcado según las vidas restantes
+                switch (vidas) {
+                    case 5:
+                        // cabeza
+                        ctx.beginPath();
+                        ctx.arc(200, 80, 30, 0, Math.PI * 2);
+                        ctx.stroke();
+                        break;
+                    case 4:
+                        // cuerpo
+                        ctx.moveTo(200, 110);
+                        ctx.lineTo(200, 250);
+                        ctx.stroke();
+                        break;
+                    case 3:
+                        // brazo izquierdo
+                        ctx.moveTo(200, 140);
+                        ctx.lineTo(150, 200);
+                        ctx.stroke();
+                        break;
+                    case 2:
+                        // brazo derecho
+                        ctx.moveTo(200, 140);
+                        ctx.lineTo(250, 200);
+                        ctx.stroke();
+                        break;
+                    case 1:
+                        // pierna izquierda
+                        ctx.moveTo(200, 250);
+                        ctx.lineTo(150, 320);
+                        ctx.stroke();
+                        break;
+                    case 0:
+                        // pierna derecha
+                        ctx.moveTo(200, 250);
+                        ctx.lineTo(250, 320);
+                        ctx.stroke();
+                        alert("¡Perdiste! La palabra era 'golondrina'.");
+                        break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
