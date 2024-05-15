@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<body>
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+<script>
+const xValues = ["progra1", "web1", "mate1", "fisica1", "ingles1","nucleo1"];
+var yValues = [0, 0, 0, 0, 0, 0];
+const barColors = ["rgba(255,0,0,0.6)", "green","blue","orange","brown"];
+for( i=0; i<6; i++){
+                yValues[i] = Math.floor(Math.random()*10+1);
+            }
+new Chart("myChart", { //nueva grafica en este espacio con estos parametros
+ type: "bar",
+ data: {
+ labels: xValues,
+ datasets: [{
+ backgroundColor: barColors,
+ data: yValues
+ }]
+ },
+ options: {
+ legend: {display: false}, //es para ver si se despliega leyenda o no
+ title: {
+ display: true,
+ text: "parcial 1"
+ }
+ }
+});
+</script>
+</body>
+</html>
+
