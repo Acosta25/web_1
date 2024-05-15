@@ -1,0 +1,185 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow&display=swap');
+
+body{
+    
+    font-family: "Rubik Doodle Shadow", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    background-color: #09080d;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+p{
+   font-family: "Just Another Hand", cursive;
+   font-weight: 400;
+   font-style: normal;     
+}
+
+.container{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header{
+   background-image: linear-gradient(
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.5)),
+    url(portada.webp);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+}
+
+.menu{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo{
+    color: #fffdfc;
+    font-size: 25px;
+}
+
+.menu .navbar ul li{
+    position: relative;
+    float: left;
+}
+
+.menu .navbar ul li a{
+    font-size: 18px;
+    padding: 20px;
+    color: #fffdfc;
+    display: block;
+}
+
+.menu .navbar ul li a :hover{
+    color: #B79758;
+}
+
+#menu{
+    display: none;
+}
+
+.menu-icono{
+    width: 25px;
+}
+
+.menu label{
+    cursor: pointer;
+    display: none;
+}
+
+.header-txt{
+    width: 50%;
+}
+
+.header-txt h1{
+    font-size: 105px;
+    line: height 110px;
+    color: #09080d;
+    margin-bottom: 15px;
+}
+
+.header-txt p{
+    font-size: 16px;
+    color: #09080d ;
+    margin-bottom: 20px;
+}
+
+.btn1 {
+    display: inline-block;
+    padding: 11px 45px;
+    background-color: #B79758;
+    color: #fffdfc;
+    border-radius: 25px;
+    font-size: 22px;
+}
+
+.btn1:hover{
+    background-color: #B79758;
+}
+
+.direction {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 0;
+}
+
+.direction p{
+    color: #fffdfc;
+    font-size: 18px;
+}
+
+.about {
+    padding: 100px 0;
+    display: flex;
+}
+
+.about-txt {
+    width: auto;
+}
+
+.about-img {
+    width: 50%;
+}
+
+.about-img img{
+    width: 600px;
+    margin-right: 20px;
+}
+
+h2 {
+    font-size: 70px;
+    color: #fffdfc;
+    margin-bottom: 15px;
+    text-align: left;
+    
+}
+
+.about-txt p{
+    font-size: 16px;
+    color: #fffdfc;
+    margin-bottom: 35px;
+}
+
+@media(max-width:991px){
+    .menu{
+        padding:30px ;
+    }
+
+    .menu label{
+        display: initial;
+    }
+
+    .menu .navbar{
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #09080d;
+        display: none;
+    }
+
+    .menu .navbar ul li{
+        width: 100%;
+    }
+
+    #menu:checked ~ .navbar{
+        display: initial;
+    }
+}
