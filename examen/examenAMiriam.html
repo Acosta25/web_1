@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Sedan+SC&display=swap" rel="stylesheet">
+    <title>Formulario Para Crear Tu Contraseña</title>
+    <style>
+        body {
+            font-family: "Courgette", cursive;
+            font-style: normal;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #81d2dff1;
+        }
+        .container {
+            background-color: rgba(240, 234, 239, 0.913);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+           
+        }
+        h1 {
+            text-align: center;
+        }
+        h2{
+            text-align: center;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        h3{
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        button {
+            cursor: pointer;
+            background-color: rgb(240, 236, 245);
+        }
+        #submit-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <h1>Formulario Para Crear Tu Contraseña</h1>
+        <h2>Miriam Juana Acosta Loyola</h2>
+        <h3>Matricula 183800</h3>
+        <ul id="instructions-list" style="display: none;">
+            <li>
+                <span>Deseas Incluir Letras Minusculas</span>
+                <button class="check-btn" data-instruction="lowercase">✔️</button>
+                <button class="cross-btn">❌</button>
+            </li>
+            <li>
+                <span>Deseas Incluir Letras Mayusculas</span>
+                <button class="check-btn" data-instruction="uppercase">✔️</button>
+                <button class="cross-btn">❌</button>
+            </li>
+            <li>
+                <span>Deseas Incluir Numeros del 1 al 9</span>
+                <button class="check-btn" data-instruction="numbers">✔️</button>
+                <button class="cross-btn">❌</button>
+            </li>
+            <li>
+                <span>Deseas Incluir Caracteres Especiales</span>
+                <button class="check-btn" data-instruction="specialChars">✔️</button>
+                <button class="cross-btn">❌</button>
+            </li>
+        </ul>
+        <button id="submit-btn">Enviar</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // la librería jsPDF
+            const { jsPDF }=window.jspdf;
+            const instructionsList=document.getElementById("instructions-list");
+            const submitBtn=document.getElementById("submit-btn");    //en esta etapa estas creando pdf
+
+            let passwordLength =getPasswordLength();// Obtiene la longitud de la contraseña cantidad de digitos
+            let passwordCount =getPasswordCount();// Obtiene la cantidad de contraseñas a generar
+
+            // en este apartado crep una alerta con la longitud y la cantidad de contraseñas a generar
+            alert(`Longitud de la contraseña: ${passwordLength}\nCantidad de contraseñas a generar: ${passwordCount}`);
+
+            instructionsList.style.display="block";// Muestra la lista de instrucciones recuadro
+
+            // Agrega click para nuestro  botón de enviar
+            submitBtn.addEventListener("click",function() {
+                // Obtiene las opciones seleccionadas
+                let options=getOptions();//falta crear las opciones de seleccion
+
+                let selectedOptions=getSelectedOptions(options); // creas las opciones seleccionadas y no seleccionadas
+                let notSelectedOptions=getNotSelectedOptions(options);//no seleccionadas
+
+                //PDF con las contraseñas
+                generatePDF(passwordLength, passwordCount, selectedOptions, notSelectedOptions, options);//sumas todo no lo OLVIDES
+                console.log("Opciones  que seleccionaste:", options);// Muestra las opciones que seleccionaste en el recuadro
+            });
+
+            // Creaste los botones de selección y deselección en este caso (palomita y tachita)
+            addCheckButtonEventListeners();
+            addCrossButtonEventListeners();
+
+            function getPasswordLength() {  // Función para medir la longitud de la contraseña primer paso
+                let length;
+                do {
+                    length = parseInt(prompt("Ingrese la longitud de la contraseña (minimo 8, maximo 15):"));
+                } while (isNaN(length) || length < 8 || length > 15); //minimo 8 maximo  15 sino negar al no cumplir 
+                return length;
+            }
+
+            // Función para obtener la cantidad de contraseñas a generar cantidad introducida por el usuario 
+            function getPasswordCount() {
+                let count;
+                do {
+                    count = parseInt(prompt("¿Cuántas contraseñas desea generar? (minimo 2, maximo 10):"));
+                } while (isNaN(count) || count<2||count>10);
+                return count;
+            }
+
+            // Funciónes para las opciones seleccionadas
+            function getOptions() {
+                let options = {
+                    length: passwordLength, //longitud
+                    count: passwordCount,//cantidad
+                    lowercase: false,
+                    uppercase: false,
+                    numbers: false,
+                    specialChars: false
+                };
+
+                //Recorre los botones de selección para ver cuáles están seleccionados
+                document.querySelectorAll(".check-btn").forEach(btn => {
+                    if (btn.classList.contains("selected")) {
+                        let instruction = btn.getAttribute("data-instruction");//instruccion para que almomento de que des en palomita o tacha marque
+                        options[instruction] = true;
+                    }
+                });
+
+                return options;
+            }
+
+            //Función para obtener las opciones seleccionadas
+            function getSelectedOptions(options) {
+                let selected=[];
+                if (options.lowercase) selected.push("Letras Minusculas");
+                if (options.uppercase) selected.push("Letras Mayusculas");//estas poniendo que escogiste 
+                if (options.numbers) selected.push("Numeros del 1 al 9");
+                if (options.specialChars) selected.push("Caracteres Especiales");
+                return selected;
+            }
+
+            //Función para obtener las opciones no seleccionadas
+            function getNotSelectedOptions(options) {
+                let notSelected = [];
+                if (!options.lowercase) notSelected.push("Letras Minusculas");
+                if (!options.uppercase) notSelected.push("Letras Mayusculas");//estas poniendo lo que no quieres 
+                if (!options.numbers) notSelected.push("Numeros del 1 al 9");
+                if (!options.specialChars) notSelected.push("Caracteres Especiales");//todos tus signos rarros
+                return notSelected;
+            }
+
+            // En tu Función vas a  generar el PDF con las especificaciones y contraseñas 
+            function generatePDF(length, count, selectedOptions, notSelectedOptions, options) {//vas a agregar texto al documento PDF
+                const doc=new jsPDF();//muestras longitud y las contrase;as
+                //const doc = new jsPDF();
+                const titleStyle = { fontSize: 22, fontStyle: 'cursive', textColor: 'pink' };
+                const subtitleStyle = { fontSize: 14, textColor: 'black' };
+                const normalStyle = { fontSize: 12, textColor: 'black' };
+
+                // Título
+                doc.setFont(titleStyle.fontStyle);
+                doc.setTextColor(titleStyle.textColor);
+                doc.text(`Longitud de la contraseña: ${length}`, 10, 10);
+
+                // Información de contraseñas
+                doc.setFont(subtitleStyle.fontStyle);
+                doc.setTextColor(subtitleStyle.textColor);
+                doc.text(`Cantidad de contraseñas a generar: ${count}`, 10, 20);
+                doc.text(`Opciones seleccionadas: ${selectedOptions.join(", ")}`, 10, 30);
+
+                
+                doc.text(`Opciones no seleccionadas: ${notSelectedOptions.join(", ")}`, 10, 40);//agregas texto al documento (posicion x & y)
+
+                let passwords=generatePasswords(options);//aqui no lo ovides generas todas las contrase;as
+                let yPosition=50;//posicion de texto para mis contrase;as
+                doc.text("Contraseñas generadas:", 10, yPosition);
+
+                passwords.forEach((password, index) => {
+                    yPosition +=10; 
+                    doc.text(`${index + 1}: ${password}`, 10, yPosition);
+                });
+
+                doc.save("Especificaciones_Contraseñas.pdf");
+            }
+
+            //Generas las contraseñas en este caso agregas los elementos
+            function generatePasswords(options) {
+                const lowercase= "abcdefghijklmnopqrstuvwxyz";
+                const uppercase= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const numbers= "0123456789";//solo permites esto de no ser a si no vale
+                const specialChars= "!@#$%^&*()_+[]{}|;:,.<>?";
+                let allChars="";
+                let passwords=[];
+
+                if (options.lowercase) allChars += lowercase; //combinaciones que estoy generando 
+                if (options.uppercase) allChars += uppercase;
+                if (options.numbers) allChars += numbers;
+                if (options.specialChars) allChars += specialChars;
+
+                for (let i=0; i < options.count; i++) {
+                    let password="";  //mi ciclo para poder generar las contrase;as aleatoriad
+                    for (let j =0; j < options.length; j++) {
+                        const randomIndex=Math.floor(Math.random() * allChars.length);
+                        password +=allChars[randomIndex];
+                    }
+                    passwords.push(password);
+                }
+
+                return passwords;
+            }
+
+            // Agrega eventos click a los botones de selección
+            function addCheckButtonEventListeners() {
+                document.querySelectorAll(".check-btn").forEach(btn => {
+                    btn.addEventListener("click", function() {
+                        this.classList.toggle("selected");
+                    });
+                });
+            }
+
+            // Agrega eventos click a los botones de deselección
+            function addCrossButtonEventListeners() {
+                document.querySelectorAll(".cross-btn").forEach(btn => {
+                    btn.addEventListener("click", function() {
+                        const parent=this.parentElement;
+                        parent.querySelector(".check-btn").classList.remove("selected");
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
